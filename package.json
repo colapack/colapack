@@ -1,0 +1,18 @@
+{
+  "name": "colapack",
+  "version": "0.1.0",
+  "description": "A set of Node.js developer tools, lightweight and dependency free.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colapack/colapack.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/colapack/colapack/issues"
+  },
+  "homepage": "https://github.com/colapack/colapack#readme"
+}
