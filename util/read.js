@@ -5,9 +5,7 @@ import print from './print.js'
 export default function read(file) {
   let resolved = path.resolve(process.cwd(), file);
 
-  if (!fs.existsSync(resolved)) {
-    return print.yellow(`warning: ${resolved} does not exist. Returned 'undefined'`);
-  }
+  if (!fs.existsSync(resolved)) return undefined;
 
   if (path.extname(resolved) === '.json') {
     try { return JSON.parse(fs.readFileSync(resolved), 'utf8') } 
