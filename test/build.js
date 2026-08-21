@@ -1,3 +1,3 @@
 import colapack from '../index.js';
 
-colapack.build();
+colapack.build({ test: true });
