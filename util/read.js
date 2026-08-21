@@ -6,7 +6,7 @@ export default function read(file) {
   let resolved = path.resolve(process.cwd(), file);
 
   if (!fs.existsSync(resolved)) {
-    return print.red(`error: ${resolved} does not exist. Returned 'undefined'`);
+    return print.yellow(`warning: ${resolved} does not exist. Returned 'undefined'`);
   }
 
   if (path.extname(resolved) === '.json') {
