@@ -3,14 +3,21 @@
   "version": "0.1.0",
   "description": "A set of Node.js developer tools, lightweight and dependency free.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:build": "node test/build.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colapack/colapack.git"
   },
-  "keywords": [],
-  "type": "commonjs",
+  "keywords": [
+    "colapack",
+    "web",
+    "server",
+    "static",
+    "template", 
+    "devtools"
+  ],
+  "type": "module",
   "bugs": {
     "url": "https://github.com/colapack/colapack/issues"
   },
