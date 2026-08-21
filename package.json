@@ -2,9 +2,6 @@
   "name": "colapack",
   "version": "0.1.0",
   "description": "A set of Node.js developer tools, lightweight and dependency free.",
-  "scripts": {
-    "test:build": "node test/build.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colapack/colapack.git"
