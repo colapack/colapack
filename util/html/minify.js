@@ -22,6 +22,17 @@ const BOOLEAN_ATTRS = new Set([
   'loop', 'open', 'async', 'novalidate', 'ismap', 'reversed'
 ]);
 
+// Tags where a boundary space is visually significant (e.g. "<span>a</span>
+// <span>b</span>" must keep that space, or the words would visually merge).
+// Whitespace touching any other tag (block-level, or none) is safe to drop
+// entirely rather than just collapsing it to a single space.
+const INLINE_TAGS = new Set([
+  'a', 'abbr', 'b', 'bdi', 'bdo', 'br', 'cite', 'code', 'data', 'dfn',
+  'em', 'i', 'img', 'input', 'kbd', 'label', 'mark', 'q', 'rp', 'rt',
+  'ruby', 's', 'samp', 'select', 'small', 'span', 'strong', 'sub', 'sup',
+  'textarea', 'time', 'u', 'var', 'button'
+]);
+
 const TOKEN_REGEX = /<!DOCTYPE[^>]*>|<!--[\s\S]*?-->|<\/?[a-zA-Z][\w:-]*(?:\s+(?:"[^"]*"|'[^']*'|[^<>])*?)?\/?>|[^<]+/gi;
 
 const ATTR_REGEX = /([\w:-]+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s"'>]+))?/g;
@@ -36,6 +47,9 @@ function isComment(t) { return /^<!--/.test(t); }
 function isDoctype(t) { return /^<!doctype/i.test(t); }
 function isSelfClosing(t) {
   return /\/>\s*$/.test(t) || VOID_TAGS.has(getTagName(t));
+}
+function isInlineTag(t) {
+  return t != null && t.startsWith('<') && INLINE_TAGS.has(getTagName(t));
 }
 
 function minifyTag(tag, options) {
@@ -129,7 +143,22 @@ export function minify(html, options = {}) {
 
     if (!/^</.test(raw)) {
       // text node
-      out += opts.collapseWhitespace ? raw.replace(/\s+/g, ' ') : raw;
+      if (opts.collapseWhitespace) {
+        let text = raw.replace(/\s+/g, ' '); // collapse internal runs to a single space
+
+        // Only keep a boundary space when the adjacent side is an inline
+        // tag — that space is what keeps neighboring inline content (or
+        // words) from visually merging. Any other boundary (block tag,
+        // comment, doctype, or start/end of document) can drop it entirely.
+        const prevToken = tokens[i - 1];
+        const nextToken = tokens[i + 1];
+        if (/^\s/.test(text) && !isInlineTag(prevToken)) text = text.replace(/^\s+/, '');
+        if (/\s$/.test(text) && !isInlineTag(nextToken)) text = text.replace(/\s+$/, '');
+
+        out += text;
+      } else {
+        out += raw;
+      }
       continue;
     }
 
@@ -142,12 +171,7 @@ export function minify(html, options = {}) {
     }
   }
 
-  if (opts.collapseWhitespace) {
-    // Collapse whitespace directly between tags (e.g. "\n  <div>" -> "<div>")
-    out = out.replace(/>\s+</g, '><').trim();
-  }
-
-  return out;
+  return opts.collapseWhitespace ? out.trim() : out;
 }
 
 export default minify;
