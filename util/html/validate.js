@@ -172,7 +172,7 @@ export function validate(html, options = {}) {
       if (stackPos !== stack.length - 1) {
         // everything above stackPos got skipped over — those are unclosed
         for (let k = stack.length - 1; k > stackPos; k--) {
-          add('error', `Unclosed tag <${stack[k].tagName}> (opened here, never closed before </${tagName}> appeared)`, stack[k].index);
+          add('error', `Unclosed tag <${stack[k].tagName}> (never closed before </${tagName}> appeared)`, stack[k].index);
         }
       }
       stack.length = stackPos; // pop through and including the match
