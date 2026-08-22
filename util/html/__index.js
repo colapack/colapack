@@ -1,9 +1,11 @@
 import minify from './minify.js';
 import pretty from './pretty.js';
+import validate from './validate.js';
 
 const html = {
   minify,
-  pretty
+  pretty,
+  validate
 }
 
 export default html;
